@@ -208,4 +208,17 @@ export const AdminDashboard: React.FC = () => {
                <Input
                 label={t('admin.facebookUrlLabel')}
                 value={socialLinks.facebook || ''}
-                onChange={e => setSocialLinks({ ...socialLinks, facebook: e.g…
+                onChange={e => setSocialLinks({ ...socialLinks, facebook: e.target.value })}
+              />
+               <Input
+                label={t('admin.instagramUrlLabel')}
+                value={socialLinks.instagram || ''}
+                onChange={e => setSocialLinks({ ...socialLinks, instagram: e.target.value })}
+              />
+              <Button type="submit" icon={Save}>{t('admin.saveLinksButton')}</Button>
+           </form>
+        </Card>
+      </div>
+    </div>
+  );
+};
