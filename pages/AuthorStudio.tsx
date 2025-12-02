@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StorageService } from '../services/store';
 import { Story, User, Episode } from '../types';
 import { Button, Input, TextArea, Card } from '../components/UI';
+import { RichTextEditor } from '../components/RichTextEditor';
 import { Plus, PenTool, Save, BookOpen, ArrowLeft, Trash2, Edit3, Eye, EyeOff, Settings, AlertTriangle } from 'lucide-react';
 import { useTranslations } from '../LanguageContext';
 import { useToast } from '../ToastContext';
@@ -95,8 +96,14 @@ export const AuthorStudio: React.FC<AuthorStudioProps> = ({ user }) => {
 
     // --- VALIDATION ---
     const content = episodeForm.content;
-    if (content.length > 4000) {
-        showToast(t('errors.contentTooLong', { max: 4000 }), 'error'); return;
+    const maxCharacters = 50000;
+    const wordCount = content.trim().split(/\s+/).filter(w => w.length > 0).length;
+
+    if (wordCount > 2500) {
+        showToast(t('errors.contentTooLong', { max: 2500 }), 'error'); return;
+    }
+    if (content.length > maxCharacters) {
+        showToast(t('errors.contentTooLong', { max: maxCharacters }), 'error'); return;
     }
     const linkRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
     if (linkRegex.test(content)) {
@@ -188,20 +195,14 @@ export const AuthorStudio: React.FC<AuthorStudioProps> = ({ user }) => {
           <p className="text-gray-400 mb-6">{t('authorStudio.for')}: {selectedStory.title}</p>
           <form onSubmit={handleSaveEpisode}>
             <Input label={t('authorStudio.chapterTitleLabel')} value={episodeForm.title} onChange={e => setEpisodeForm({...episodeForm, title: e.target.value})} required />
-            <div className="relative">
-                <TextArea 
-                    label={t('authorStudio.contentLabel')} 
-                    value={episodeForm.content} 
-                    onChange={e => setEpisodeForm({...episodeForm, content: e.target.value})}
-                    required 
-                    rows={15} 
-                    className="font-serif text-lg leading-relaxed" 
-                    maxLength={4000}
-                />
-                <div className={`absolute bottom-5 right-3 text-xs ${episodeForm.content.length > 4000 ? 'text-red-500' : 'text-gray-400'}`}>
-                    {episodeForm.content.length} / 4000
-                </div>
-            </div>
+            <RichTextEditor
+              label={t('authorStudio.contentLabel')}
+              value={episodeForm.content}
+              onChange={e => setEpisodeForm({...episodeForm, content: e})}
+              maxLength={50000}
+              rows={15}
+              placeholder={t('authorStudio.contentLabel')}
+            />
             <Button type="submit" icon={Save}>{t('authorStudio.saveChapter')}</Button>
           </form>
         </Card>

@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { StorageService } from '../services/store';
 import { Story, Episode, User, Comment, UserRole } from '../types';
 import { Button, TextArea } from '../components/UI';
+import { FormattedContent } from '../components/FormattedContent';
 import { Heart, MessageSquare, ArrowLeft, User as UserIcon, Book, List, ChevronLeft, ChevronRight, ThumbsUp, ThumbsDown, CornerUpLeft, Eye, Share2, AlertTriangle } from 'lucide-react';
 import { useTranslations } from '../LanguageContext';
 import { useToast } from '../ToastContext';
@@ -314,8 +315,8 @@ export const StoryView: React.FC<StoryViewProps> = ({ user }) => {
                 </div>
 
 
-                <div className="text-base sm:text-lg text-gray-300 leading-relaxed font-serif whitespace-pre-line mb-12">
-                    {activeEpisode.content}
+                <div className="mb-12">
+                    <FormattedContent content={activeEpisode.content} />
                 </div>
                  <footer className="flex items-center justify-center gap-4 mb-12">
                     <Button 
